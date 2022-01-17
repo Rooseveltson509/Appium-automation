@@ -1,5 +1,6 @@
 package fr.zenity.appium.PageObjects;
 
+import fr.zenity.appium.Enum.Direction;
 import fr.zenity.appium.drivers.MobileDriverManager;
 import fr.zenity.appium.drivers.utils.Waiter;
 import io.appium.java_client.*;
@@ -86,10 +87,7 @@ public class RegisterView extends View{
         cPwd.click();
         wait.until(ExpectedConditions.visibilityOf(cPwd));
         cPwd.sendKeys(cPassword);
-        //new WebDriverWait(driver, 5);
-        //String text = driver.findElement(By.xpath("//android.widget.ImageView[@index='5']"));
-        /*String text = driver.findElement(By.xpath("//android.widget.ImageView[@index='5']")).getAttribute("content-desc");
-        System.out.println("++++++++++++++++++++++++++++++" + text);*/
+
     }
 
     public void submit(){
@@ -97,95 +95,17 @@ public class RegisterView extends View{
         btnSubscribe.click();
     }
 
-    public void scrollingVertical(){
-        //container Wrap
-        driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().xpath(\"//android.widget.ScrollView[@index='1']\")).scrollIntoView(new UiSelector().xpath(\"//android.widget.ImageView[@index='5']\"))")).click();
-
-    }
 
     public void checkIfElementIsPresent() {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        try {
-            if (wait.until(ExpectedConditions.visibilityOf(imConnected)) != null) {
-                Assert.assertTrue(imConnected.isDisplayed());
-                System.out.println("******************** ELEMENT DISPLAYED ***************************");
-                wait.until(ExpectedConditions.visibilityOf(gotoWebSite));
-                gotoWebSite.click();
-                longWait.until(ExpectedConditions.visibilityOf(avatarAccount));
-                avatarAccount.click();
-            }
-        } catch (Exception e) {
-            System.out.println("Element not present, we are good here!");
-        }
+        checkIfElementIsPresentAndGotoNewElement(imConnected, gotoWebSite);
     }
 
     public void logOut() throws InterruptedException {
-        wait.until(ExpectedConditions.visibilityOf(avatarAccount));
-        new WebDriverWait(driver, 5);
-
-        MobileElement mElement = driver.findElement(MobileBy.xpath("//android.widget.ImageView[@index='5']"));
-
-        scrollUntilElementFound(mElement,"Log Out");
-        new WebDriverWait(driver, 5);
-        //logOutBtn.click();
-        //scrollAndClick("Help Center");
-        //scrollingVertical();
-        //scrollUsingTouchActionsByElements();
-        Thread.sleep(5000);
+        longWait.until(ExpectedConditions.visibilityOf(avatarAccount)).click();
+        swipeScreen(Direction.UP);
+        longWait.until(ExpectedConditions.visibilityOf(logOutBtn)).click();
     }
 
-    public void scrollAndClick(String visibleText) {
-        //driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""+visibleText+"\").instance(0))")).click();
-        new TouchAction((PerformsTouchActions) MobileDriverManager.getInstance().getDriver())
-                .press(PointOption.point(0, 2))
-                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1)))
-                .moveTo(PointOption.point(0, 3))
-                .release().perform();
-    }
-
-    public void scrollUsingTouchActionsByElements() {
-        MobileElement element = driver.findElement(MobileBy.AndroidUIAutomator(
-                "new UiScrollable(new UiSelector().xpath(\"//android.widget.ScrollView[@index='1']\")).getChildByText("
-                        + "new UiSelector().xpath(\"//android.widget.ImageView[@index='5']\"), \"Log Out\")"));
-
-//Perform the action on the element
-        element.click();
-    }
-    public void scroll() {
-         //driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().xpath(\"//android.widget.ScrollView[@index='1']\")).scrollIntoView(new UiSelector().xpath(\"//android.widget.ImageView[@index='5']\"))"));
-        /*new TouchAction((PerformsTouchActions) MobileDriverManager.getInstance().getDriver())
-                .press(PointOption.point(0, 0))
-                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1)))
-                .moveTo(PointOption.point(0, 2))
-                .release().perform();*/
-
-        driver.findElementByAccessibilityId("Views").click();
-        AndroidElement list = (AndroidElement) driver.findElement(By.id("android:id/mobile_list"));
-        MobileElement listGroup = list
-                .findElement(MobileBy
-                        .AndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView("
-                                + "new UiSelector().text(\" List item:25\"));"));
-        Assert.assertNotNull(listGroup.getLocation());
-        listGroup.click();
-    }
-
-    public void scrollUntilElementFound(MobileElement elementScrollTo, String parentScrollViewId) {//Scrolls until element is found
-        boolean elementFound = false;
-        while(!elementFound) {
-            try {
-                if(elementScrollTo.isDisplayed()) {
-                    break;
-                }
-            }catch(Exception e) {
-                elementFound=false;
-            }
-            try {
-                driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().description(\""+parentScrollViewId+"\")).scrollForward()"));
-            }catch(Exception e) {
-                //Ignore error
-            }
-        }
-    }
 
 
 }
