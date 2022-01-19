@@ -123,8 +123,14 @@ public class LoginView extends View{
         longWait.until(ExpectedConditions.visibilityOf(buttonSave)).click();
 
 
-        longWait.until(ExpectedConditions.visibilityOf(popUpSuccess)).click();
-        longWait.until(ExpectedConditions.visibilityOf(popUpSuccess)).click();
+        try{
+            longWait.until(ExpectedConditions.visibilityOf(popUpSuccess)).click();
+            longWait.until(ExpectedConditions.visibilityOf(popUpSuccess)).click();
+
+        }catch(Exception e){
+            System.out.println("++++++++++++++++++ Eche de la commande veuillez reessayer plus tart ....");
+            e.printStackTrace();
+        }
 
     }
 
@@ -133,6 +139,7 @@ public class LoginView extends View{
         //isOK.click();
     }
     public void logOut() throws InterruptedException {
+        Thread.sleep(2000);
         longWait.until(ExpectedConditions.visibilityOf(avatarAccount)).click();
         swipeScreen(Direction.UP);
         wait.until(ExpectedConditions.visibilityOf(logOutBtn)).click();

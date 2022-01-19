@@ -7,7 +7,8 @@ Feature: As a user I want connect to the store
     Then I am on the account page
     Examples:
       | email           | password   | cPassword  |
-      | roose@gmail.com | roosetest1 | roosetest1 |
+      | roosegmail.com  | roosetest1 | roosetest1 |
+      | roose3gmail.com | roosetest1 | roosetest1 |
 
   @Login
   Scenario Outline: Test 2
@@ -22,3 +23,4 @@ Feature: As a user I want connect to the store
     Examples:
       | email           | password   | cardNumber       | expirationDate | CVC |
       | roose@gmail.com | roosetest1 | 4242424242424242 | 1122           | 123 |
+      | roose@gmail.com | roosetest1 | 4242424242424248 | 1122           | 123 |

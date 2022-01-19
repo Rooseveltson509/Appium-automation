@@ -19,10 +19,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-@Listeners({AllureListeners.class})
 public class BaseRunner extends AbstractTestNGCucumberTests {
 
-    @BeforeSuite
+    @Parameters({"browser"})
+    @BeforeMethod
     public void setUp(){
         if(!AppiumServer.isRunning()) AppiumServer.start();
         MobileDriverManager
@@ -32,15 +32,7 @@ public class BaseRunner extends AbstractTestNGCucumberTests {
                     Properties.configuration.getMobileOS()
                 );
     }
-
-    @Attachment(value="Page screenshot" , type="image/png")
-    public byte[] saveScreenshot(WebDriver driver) {
-        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-    }
-    public void allureSaveDeviceScreenshot() {
-        Allure.addAttachment("screenshot", new ByteArrayInputStream(((TakesScreenshot) MobileDriverManager.getInstance().getDriver()).getScreenshotAs(OutputType.BYTES)));
-    }
-    @AfterSuite
+    @AfterMethod
     public void tearDown(){
         MobileDriverManager.driver().quit();
         if(AppiumServer.isRunning()) AppiumServer.Stop();

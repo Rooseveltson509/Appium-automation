@@ -8,6 +8,7 @@ public class LoginSteps implements En {
     public LoginSteps(LoginView loginView) {
         Given("^I am on the login page$", () -> {
             //assert loginView.applicationOk();
+            System.out.println("------------- login page ----------------------");
             loginView.clickOnContinue();
         });
 
@@ -16,18 +17,18 @@ public class LoginSteps implements En {
             System.out.println("<<<<<<<<<<<<<<<<<<< When >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             loginView.login(email, password);
             loginView.submit();
-            Thread.sleep(5000);
+            //Thread.sleep(5000);
         });
 
         And("^I am on the store catalogue$", () -> {
             System.out.println("<<<<<<<<<<< i'm login >>>>>>>>>>>>>>>>>>>>>>");
             loginView.gotoStore();
-            loginView.shopping();
             //Thread.sleep(6000);
         });
 
         And("^I choose one product and i add i increase and add it to the cart$", () -> {
             System.out.println("I increment the quantity of my cart.");
+            loginView.shopping();
         });
 
         And("^I return to the catalogue of product i choose another product and i increase and add it to the cart$", () -> {
@@ -47,6 +48,7 @@ public class LoginSteps implements En {
         Then("^I payed my order$", () -> {
             System.out.println("then I validate my cart");
             loginView.logOut();
+            Thread.sleep(2000);
         });
     }
 }

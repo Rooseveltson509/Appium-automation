@@ -37,7 +37,7 @@ public abstract class View {
         wait        = new WebDriverWait(driver, 5);
         shortWait   = new WebDriverWait(driver, 10);
         middleWait  = new WebDriverWait(driver, 20);
-        longWait    = new WebDriverWait(driver, 6000);
+        longWait    = new WebDriverWait(driver, 30);
 
     }
 

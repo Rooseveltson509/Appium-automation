@@ -6,7 +6,7 @@ import io.cucumber.testng.CucumberOptions;
         features = "./src/test/resources/features",
         monochrome = true,
         glue = {"fr.zenity.appium.stepDefinitions"},
-        tags = "@Login",
+        tags = "@Register",
         plugin = {
                 "pretty",
                 "html:target/reports/html/htmlreport",

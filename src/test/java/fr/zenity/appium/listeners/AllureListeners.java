@@ -1,9 +1,11 @@
 package fr.zenity.appium.listeners;
 
 import fr.zenity.appium.drivers.MobileDriverManager;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Attachment;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -12,8 +14,11 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-public class AllureListeners implements ITestListener {
+import java.io.ByteArrayInputStream;
+import java.util.UUID;
 
+public class AllureListeners implements ITestListener {
+    protected AppiumDriver<MobileElement> driver;
     public void onTestStart(ITestContext iTestContext) {
         System.out.println("I am on start method "+ iTestContext.getName());
         iTestContext.setAttribute("Driver", MobileDriverManager.getInstance().getDriver());
@@ -27,15 +32,25 @@ public class AllureListeners implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         System.out.println("I am on testFailure method " + getTestMethodName(result)+" failed");
+        if(ITestResult.FAILURE == result.getStatus()){
+            saveFailureScreenShot(driver);
+            System.out.println("SCREENSHOT TAKEN.........");
+            Allure.addAttachment("Any text", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+            Allure.addAttachment(UUID.randomUUID().toString(), new ByteArrayInputStream(((TakesScreenshot)MobileDriverManager.getInstance().getDriver()).getScreenshotAs(OutputType.BYTES)));
+            //Assert.fail("ERROR");
+            System.out.println("SCREENSHOT TAKEN");
+            System.out.println("<<<<<<<<<<<<<< "+ITestResult.SUCCESS+" >>>>>>>>>>>>>>");
+        }
+
         //Object testClass = result.getInstance();
         //ITestContext context = result.getTestContext();
         //WebDriver driver = (WebDriver) context.getAttribute("driver");
-        AndroidDriver<MobileElement> driver = (AndroidDriver<MobileElement>) MobileDriverManager.getInstance().getDriver();
-        if (driver instanceof WebDriver) {
+       /* AndroidDriver<MobileElement> driver = (AndroidDriver<MobileElement>) MobileDriverManager.getInstance().getDriver();
+        if (driver != null) {
             System.out.println("Screenshot captured for test case: "+getTestMethodName(result));
             saveFailureScreenShot(driver);
         }
-        saveTextLog(getTestMethodName(result) + "failed and screenshot taken!");
+        saveTextLog(getTestMethodName(result) + "failed and screenshot taken!")*/;
     }
 
     @Override
@@ -65,7 +80,7 @@ public class AllureListeners implements ITestListener {
 
     // Screenshot attachments for allure
     @Attachment(value ="page screenshot", type = "image/png")
-    public byte[] saveFailureScreenShot(WebDriver driver) {
+    public byte[] saveFailureScreenShot(AppiumDriver<MobileElement> driver) {
         return ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
     }
 
