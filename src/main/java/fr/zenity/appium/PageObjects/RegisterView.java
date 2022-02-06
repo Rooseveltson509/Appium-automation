@@ -1,26 +1,13 @@
 package fr.zenity.appium.PageObjects;
 
 import fr.zenity.appium.Enum.Direction;
-import fr.zenity.appium.drivers.MobileDriverManager;
-import fr.zenity.appium.drivers.utils.Waiter;
-import io.appium.java_client.*;
-import io.appium.java_client.android.AndroidElement;
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import io.appium.java_client.touch.WaitOptions;
-import io.appium.java_client.touch.offset.PointOption;
-import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.openqa.selenium.*;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.awt.*;
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 
 public class RegisterView extends View{
@@ -56,6 +43,21 @@ public class RegisterView extends View{
     private MobileElement logOutBtn;
 
 
+    @AndroidFindBy(xpath = "//android.widget.Button[@index='9']")
+    private MobileElement loadingBtn;
+
+
+    @AndroidFindBy(id = "android.view.View[@content-desc='Veuillez entrer un email valide']")
+    private MobileElement checkEmailIsValid;
+
+
+    @AndroidFindBy(id = "android.view.View[@index='8']")
+    private MobileElement checkPwdToShort;
+
+
+    @AndroidFindBy(id = "android.view.View[@index='10']")
+    private MobileElement checkPwdIsMatching;
+
     public boolean applicationOk(){
         longWait.until(visibilityOf(isOK));
         return true;
@@ -90,9 +92,14 @@ public class RegisterView extends View{
 
     }
 
-    public void submit(){
-        wait.until(ExpectedConditions.visibilityOf(btnSubscribe));
-        btnSubscribe.click();
+    public void submit(String email, String password) throws InterruptedException {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(btnSubscribe)).click();
+        } catch (Exception e) {
+            loadingBtn.click();
+            System.out.println(e.getMessage());
+        }
+        checkRegisterFormValidate(imConnected, gotoWebSite, email, password);
     }
 
 
@@ -105,7 +112,6 @@ public class RegisterView extends View{
         swipeScreen(Direction.UP);
         longWait.until(ExpectedConditions.visibilityOf(logOutBtn)).click();
     }
-
 
 
 }

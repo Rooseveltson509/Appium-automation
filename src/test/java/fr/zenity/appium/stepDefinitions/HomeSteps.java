@@ -13,7 +13,7 @@ public class HomeSteps implements En {
            homePage.clickOnContinue();
         });
 
-        Given("^I click on registered button$", () -> {
+        Then("^I click on registered button$", () -> {
             try {
                 Thread.sleep(5000);
             }catch (Exception e){}

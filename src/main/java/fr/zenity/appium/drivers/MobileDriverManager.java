@@ -3,7 +3,7 @@ package fr.zenity.appium.drivers;
 import fr.zenity.appium.Enum.Device;
 import fr.zenity.appium.Enum.Plateform;
 import fr.zenity.appium.drivers.utils.DriversImpl;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import java.util.Locale;
 
@@ -15,7 +15,7 @@ public final class MobileDriverManager {
     /***
      *
      */
-    private static Logger LOG = Logger.getLogger(MobileDriverManager.class);
+    //private static Logger LOG = Logger.getLogger(MobileDriverManager.class);
 
     private ThreadLocal<DriversImpl> driver = new ThreadLocal<>();
 
@@ -25,8 +25,11 @@ public final class MobileDriverManager {
 
     public void setDriver(Device device, Plateform platform){
         //
-        LOG.info("Platform selected :"+platform.toString().toUpperCase(Locale.ROOT));
-        LOG.info("Device selected :"+device.getName());
+        //LOG.info("Platform selected :"+platform.toString().toUpperCase(Locale.ROOT));
+        //LOG.info("Device selected :"+device.getName());
+
+        System.out.println("Platform selected :"+platform.toString().toUpperCase(Locale.ROOT));
+        System.out.println("Device selected :"+device.getName());
         switch (platform){
             case ANDROID: driver.set(new AndroidConnector(device,platform)); break;
             case WINDOWS_PHONE:

@@ -4,7 +4,7 @@ import fr.zenity.appium.config.Properties;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -14,7 +14,7 @@ public final class AppiumServer {
     /***
      *
      */
-    private static Logger LOG = Logger.getLogger(AppiumServer.class);
+    //private static Logger LOG = Logger.getLogger(AppiumServer.class);
 
     private static AppiumDriverLocalService localDaemon;
 
@@ -31,15 +31,18 @@ public final class AppiumServer {
 
         localDaemon = AppiumDriverLocalService.buildService(serviceBuilder);
         localDaemon.start();
-        LOG.info(" Starting Appium Server");
+        //LOG.info(" Starting Appium Server");
+        System.out.println(" Starting Appium Server");
     }
 
     public static void Stop(){
         try{
             localDaemon.stop();
-            LOG.info("Appium server has been stopped");
+            //LOG.info("Appium server has been stopped");
+            System.out.println("Appium server has been stopped");
         }catch (Exception e){
-            LOG.info("Stopping Appium server has failed");
+            //LOG.info("Stopping Appium server has failed");
+            System.out.println("Stopping Appium server has failed");
         }
     }
 

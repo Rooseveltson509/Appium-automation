@@ -8,12 +8,16 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import io.qameta.allure.Allure;
 import org.junit.Assert;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.ByteArrayInputStream;
 import java.time.Duration;
 
 public abstract class View {
@@ -37,11 +41,42 @@ public abstract class View {
         wait        = new WebDriverWait(driver, 5);
         shortWait   = new WebDriverWait(driver, 10);
         middleWait  = new WebDriverWait(driver, 20);
-        longWait    = new WebDriverWait(driver, 30);
+        longWait    = new WebDriverWait(driver, 5);
 
     }
 
     public void checkIfElementIsPresentAndGotoNewElement(MobileElement mElPresent, MobileElement goTo) {
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        try {
+            wait.until(ExpectedConditions.visibilityOf(mElPresent));
+            wait.until(ExpectedConditions.visibilityOf(goTo));
+            goTo.click();
+            try{
+                goTo.click();
+            }
+            catch (Exception e){
+                System.out.println("----not clicking----");
+            }
+            System.out.println("******************** ELEMENT DISPLAYED ***************************");
+        } catch (Exception e) {
+            System.out.println("Element not present, we are good here!");
+        }
+    }
+
+    public void checkLoginIsFail(MobileElement mElPresent, String invalidMel) {
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        try {
+
+            if (wait.until(ExpectedConditions.visibilityOf(mElPresent)) != null) {
+                Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+                Assert.fail("INVALID CREDENTIAL " + mElPresent.getAttribute("content-desc") + ": " + invalidMel);
+            }
+        } catch (Exception e) {
+            System.out.println("Element not present, we are good here!");
+        }
+    }
+
+    public void checkRegisterFormValidate(MobileElement mElPresent, MobileElement goTo, String email, String password) {
         WebDriverWait wait = new WebDriverWait(driver, 5);
         try {
             if (wait.until(ExpectedConditions.visibilityOf(mElPresent)) != null) {
@@ -52,8 +87,11 @@ public abstract class View {
             }
         } catch (Exception e) {
             System.out.println("Element not present, we are good here!");
+            Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+            Assert.fail("INVALID CREDENTIALS: " + "\n" + "Email: " + email + "\n" + "Password: " +password);
         }
     }
+
 
 
 

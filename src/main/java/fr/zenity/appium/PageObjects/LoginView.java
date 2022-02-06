@@ -1,9 +1,16 @@
 package fr.zenity.appium.PageObjects;
 
 import fr.zenity.appium.Enum.Direction;
+import fr.zenity.appium.data.Products;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.util.List;
+import java.util.Objects;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
@@ -13,7 +20,7 @@ public class LoginView extends View{
     @AndroidFindBy(xpath="//android.widget.Button[@index='1']")
     private MobileElement isOK;
 
-    @AndroidFindBy(xpath = "//android.widget.ImageView[@text='Email']")
+    @AndroidFindBy(xpath = "//android.widget.ImageView[@index='0']")
     private MobileElement emailInput;
 
     @AndroidFindBy(xpath = "//android.widget.EditText[@index='1']")
@@ -36,6 +43,12 @@ public class LoginView extends View{
 
     @AndroidFindBy(xpath = "//android.view.View[@index='1']")
     private MobileElement product1;
+
+    @AndroidFindBy(xpath = "//android.view.View[@content-desc='Gloves XC Omega - Polygon€36.55']")
+    private MobileElement productText;
+
+    @AndroidFindBy(className = "android.view.View")
+    private List<MobileElement> productsList;
 
     @AndroidFindBy(xpath = "//android.view.View[@index='2']")
     private MobileElement product2;
@@ -70,6 +83,18 @@ public class LoginView extends View{
     @AndroidFindBy(id = "com.example.shop_app:id/buttonSave")
     private MobileElement buttonSave;
 
+    @AndroidFindBy(xpath = "//android.view.View[@index='6']")
+    private MobileElement checkEmailIsValid;
+
+    @AndroidFindBy(id = "android.view.View[@index='8']")
+    private MobileElement checkPwdToShort;
+
+    @AndroidFindBy(id = "android.view.View[@index='10']")
+    private MobileElement checkPwdIsMatching;
+
+    @AndroidFindBy(xpath = "//android.widget.Button[@index='7']")
+    private MobileElement loadingBtn;
+
 
 
     public void login(String email, String password) throws InterruptedException {
@@ -86,9 +111,16 @@ public class LoginView extends View{
         checkIfElementIsPresentAndGotoNewElement(imConnected, gotoWebSite);
         Thread.sleep(3000);
     }
-    public void submit(){
-        wait.until(ExpectedConditions.visibilityOf(btnSubscribe));
-        btnSubscribe.click();
+    public void submit(String Mel) throws InterruptedException {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(btnSubscribe)).click();
+        } catch (Exception e) {
+            loadingBtn.click();
+            System.out.println(e.getMessage());
+        }
+
+        checkLoginIsFail(checkEmailIsValid, Mel);
+
     }
 
     public boolean applicationOk(){
@@ -96,20 +128,24 @@ public class LoginView extends View{
         return true;
     }
 
-    public void shopping() throws InterruptedException {
+    public void shopping1(String productname) throws InterruptedException {
         swipeScreen(Direction.UP);
-        swipeScreen(Direction.LEFT);
-        longWait.until(ExpectedConditions.visibilityOf(product1)).click();
+        clickToList(productsList, productname);
+
         swipeScreen(Direction.UP);
         longWait.until(ExpectedConditions.visibilityOf(addOneCart)).click();
         longWait.until(ExpectedConditions.visibilityOf(addToCart)).click();
         longWait.until(ExpectedConditions.visibilityOf(backToStore)).click();
-        longWait.until(ExpectedConditions.visibilityOf(product2)).click();
+
+    }
+    public void shopping2(String productname) throws InterruptedException {
         swipeScreen(Direction.UP);
-        middleWait.until(ExpectedConditions.visibilityOf(addOneCart)).click();
+        checkListElPresent(productsList, productname);
+
+        swipeScreen(Direction.UP);
+        longWait.until(ExpectedConditions.visibilityOf(addOneCart)).click();
         longWait.until(ExpectedConditions.visibilityOf(addToCart)).click();
-        longWait.until(ExpectedConditions.visibilityOf(goToCart)).click();
-        longWait.until(ExpectedConditions.visibilityOf(btnValidate)).click();
+        longWait.until(ExpectedConditions.visibilityOf(backToStore)).click();
 
     }
 
@@ -143,6 +179,33 @@ public class LoginView extends View{
         longWait.until(ExpectedConditions.visibilityOf(avatarAccount)).click();
         swipeScreen(Direction.UP);
         wait.until(ExpectedConditions.visibilityOf(logOutBtn)).click();
+    }
+
+    //check an item to an existing list
+    public void clickToList(List<MobileElement> elementList, String name) throws InterruptedException {
+        MobileElement aEl = elementList.stream()
+                .filter(element -> element.getAttribute("content-desc").contains(name))
+                .findFirst().get();
+
+        aEl.click();
+    }
+
+    public void checkListElPresent(List<MobileElement> mEl, String name){
+        mEl.forEach(
+                (c) -> {
+
+                    if(!c.getAttribute("content-desc").contains(name)){
+                        try {
+                            swipeScreen(Direction.LEFT);
+                            clickToList(mEl, name);
+                            //swipeScreen(Direction.UP);
+                        } catch (InterruptedException e) {
+                            System.out.println("ELEMENT NOT FOUND ..........");
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        );
     }
 
 }
