@@ -4,8 +4,6 @@ package fr.zenity.appium.drivers.utils;
 import fr.zenity.appium.config.Properties;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
 
@@ -15,15 +13,6 @@ public class LocalDriver implements DriversImpl {
     protected AppiumDriver<MobileElement> driver;
 
     public LocalDriver(){
-        DesiredCapabilities cap = this.getAndroidCapabilities();
-
-        // avd
-        cap.setCapability("deviceName","testor");
-        cap.setCapability("platformName","Android");
-        cap.setCapability("appPackage","com.example.shop_app");
-        cap.setCapability("automationName","UiAutomator2");
-
-        driver = new AndroidDriver<>( this.getWebDriveRemoteUrl(), cap);
     }
 
     @Override

@@ -1,14 +1,16 @@
 package fr.zenity.appium.utils;
 
-import fr.zenity.appium.drivers.MobileDriverManager;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.qameta.allure.Attachment;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import io.qameta.allure.Attachment;
 
 public class Utils {
+    public static AppiumDriver<MobileElement> driver;
 
     @Attachment(value = "Screenshot after {name}", type = "image/png")
     public static byte[] takeScreenShot(String methodName) {
-        return ((TakesScreenshot) MobileDriverManager.getInstance().getDriver()).getScreenshotAs(OutputType.BYTES);
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
 }

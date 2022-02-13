@@ -9,8 +9,6 @@ public class RegisterSteps implements En {
             ){
 
         Given("^I am on the home page$", () -> {
-            /*assert registerView.applicationOk();
-            registerView.clickOnContinue();*/
             System.out.println("Register page");
             registerView.clickOnRegistered();
 
@@ -18,14 +16,14 @@ public class RegisterSteps implements En {
 
         When("^I go to the register page and I create account with \"([^\"]*)\" and \"([^\"]*)\" and \"([^\"]*)\"$", (String email, String password, String cPassword) -> {
             registerView.register(email, password, cPassword);
-            registerView.submit(email, password);
-            registerView.checkIfElementIsPresent();
+            registerView.submit();
+            registerView.checkEmail(email);
+            registerView.checkPwd(password);
+            registerView.checkPwdShort(cPassword);
             System.out.println("------before logout-------");
-            try {
-                Thread.sleep(5000);
-            }catch (Exception ignored){}
         });
         Then("^I am registered$", () -> {
+            registerView.checkIfElementIsPresent();
             System.out.println("Account has been created...");
         });
     }

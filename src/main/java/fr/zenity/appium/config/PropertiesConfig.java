@@ -3,9 +3,6 @@ package fr.zenity.appium.config;
 import fr.zenity.appium.Enum.Device;
 import fr.zenity.appium.Enum.Plateform;
 
-import java.util.Locale;
-import java.util.Objects;
-
 public class PropertiesConfig {
 
     private static PropertiesConfig INSTANCE = new PropertiesConfig();
@@ -26,7 +23,7 @@ public class PropertiesConfig {
             device = Device.parse(tmp.toUpperCase());
        // }
 
-        System.out.println("Devince "+ device.getName()+" "+ device.toString());
+        System.out.println("Rooseveltson "+ device.getName()+" "+ device.toString());
         tmp     = System.getProperty("mos", prop.getProperty("mos","android"));
         mos     = Plateform.valueOf(tmp.toUpperCase());
 

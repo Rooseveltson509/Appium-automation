@@ -5,11 +5,11 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = {
                 "./src/test/resources/features",
-                "./src/test/resources/scenarios/sc01",
+                "./src/test/resources/features/sc01",
+                "./src/test/resources/features/sc02",
         },
         monochrome = true,
         glue = {"fr.zenity.appium.stepDefinitions"},
-        //tags = "@Login",
         plugin = {
                 "pretty",
                 "html:target/reports/html/htmlreport",

@@ -13,12 +13,16 @@ import org.junit.Assert;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.ByteArrayInputStream;
 import java.time.Duration;
+import java.util.function.Function;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public abstract class View {
 
@@ -30,7 +34,7 @@ public abstract class View {
     protected WebDriverWait middleWait;
     protected WebDriverWait longWait;
 
-    protected View (){
+    protected View() {
         driver = MobileDriverManager
                 .getInstance()
                 .getDriver()
@@ -38,23 +42,30 @@ public abstract class View {
 
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 
-        wait        = new WebDriverWait(driver, 5);
-        shortWait   = new WebDriverWait(driver, 10);
-        middleWait  = new WebDriverWait(driver, 20);
-        longWait    = new WebDriverWait(driver, 5);
+        wait = new WebDriverWait(driver, 5);
+        shortWait = new WebDriverWait(driver, 10);
+        middleWait = new WebDriverWait(driver, 20);
+        longWait = new WebDriverWait(driver, 5);
 
     }
 
+    public <V> boolean longWaitUntil(Function<? super WebDriver, V> isTrue) {
+        try {
+            longWait.until(isTrue);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void checkIfElementIsPresentAndGotoNewElement(MobileElement mElPresent, MobileElement goTo) {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
         try {
             wait.until(ExpectedConditions.visibilityOf(mElPresent));
             wait.until(ExpectedConditions.visibilityOf(goTo));
             goTo.click();
-            try{
+            try {
                 goTo.click();
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("----not clicking----");
             }
             System.out.println("******************** ELEMENT DISPLAYED ***************************");
@@ -63,37 +74,68 @@ public abstract class View {
         }
     }
 
-    public void checkLoginIsFail(MobileElement mElPresent, String invalidMel) {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        try {
 
-            if (wait.until(ExpectedConditions.visibilityOf(mElPresent)) != null) {
+    public void checkPwdIsTooShort(MobileElement mElement, String pwd) {
+        try {
+            if (wait.until(ExpectedConditions.visibilityOf(mElement)) != null) {
                 Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
-                Assert.fail("INVALID CREDENTIAL " + mElPresent.getAttribute("content-desc") + ": " + invalidMel);
+                Assert.fail("INVALID CREDENTIALS: " + mElement.getAttribute("content-desc") + "\n" + "password: " + pwd);
             }
         } catch (Exception e) {
             System.out.println("Element not present, we are good here!");
         }
     }
 
-    public void checkRegisterFormValidate(MobileElement mElPresent, MobileElement goTo, String email, String password) {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+    public void checkPwdIsWong(MobileElement mElement, String password) {
         try {
-            if (wait.until(ExpectedConditions.visibilityOf(mElPresent)) != null) {
-                Assert.assertTrue(mElPresent.isDisplayed());
-                System.out.println("******************** ELEMENT DISPLAYED ***************************");
-                wait.until(ExpectedConditions.visibilityOf(goTo));
-                goTo.click();
+            if (wait.until(ExpectedConditions.visibilityOf(mElement)) != null) {
+                Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+                Assert.fail("INVALID PASSWORD: " + mElement.getAttribute("content-desc") + "\n" + "password: " + password);
             }
         } catch (Exception e) {
             System.out.println("Element not present, we are good here!");
-            Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
-            Assert.fail("INVALID CREDENTIALS: " + "\n" + "Email: " + email + "\n" + "Password: " +password);
         }
     }
 
+    public void checkEmailValid(MobileElement mElement, String email) {
+        try {
+            if (wait.until(ExpectedConditions.visibilityOf(mElement)) != null) {
+                Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+                Assert.fail("INVALID CREDENTIALS: " + mElement.getAttribute("content-desc") + "\n" + "Email: " + email);
+            }
+        } catch (Exception e) {
+            System.out.println("Element not present, we are good here!");
+        }
+    }
 
+    public void checkCardNumber(MobileElement mElement, String nCard, String exp, String cvc) {
+        if (longWaitUntil(visibilityOf(mElement))) {
+            Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+            Assert.fail("INVALID CARD NUMBER: " + mElement.getAttribute("text") + "\n" + "card number: " + nCard + "\n" + "exp: " + exp + "\n" + "CVC: " + cvc);
+        } else {
+            System.out.println("Element not present, we are good here!");
+        }
+    }
 
+    public void loginValidator(MobileElement mElement, String email, String password) {
+        try {
+            if (wait.until(ExpectedConditions.visibilityOf(mElement)) != null) {
+                Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+                Assert.fail("INVALID CREDENTIALS: " + mElement.getAttribute("content-desc") + "\n" + "Email: " + email + "\n" + "Password: " + password);
+            }
+        } catch (Exception e) {
+            System.out.println("Element not present, we are good here!");
+        }
+    }
+
+    public void registerFields(MobileElement mElement, String email, String pwd, String cpwd) {
+        if (longWaitUntil(visibilityOf(mElement))) {
+            Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+            Assert.fail("INVALID CREDENTIALS: " + mElement.getAttribute("content-desc") + "\n" + "Email: " + email + "\n" + "password: " + pwd + "\n" + "confirm password: " + cpwd);
+        } else {
+            System.out.println("Element not present, we are good here!");
+        }
+    }
 
 
     /**
@@ -160,7 +202,6 @@ public abstract class View {
             // ignore
         }
     }
-
 
 
 }

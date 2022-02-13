@@ -1,6 +1,6 @@
 Feature: As a user i want to signing
 
-  @Login
+  @SC01
   Scenario Outline: Login page
     Given I am on the login page
     When I go to the login page and I signing with my "<email>" and "<password>"
@@ -8,6 +8,6 @@ Feature: As a user i want to signing
     Examples:
       | email           | password     |
       | roosegmail.com  | roosetest1   |
-      | roose@gmail.com | roos         |
-      | roose@gmail.com | wongPassword |
+      | roose@gmail.com | roose        |
+      | roose@gmail.com | fakepassword |
       | roose@gmail.com | roosetest1   |
