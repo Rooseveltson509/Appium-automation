@@ -1,6 +1,6 @@
 Feature: Placing an Order
 
-  @CAS_PASSANT
+  @demo
   Scenario Outline: As a user i want to place an order
     Given I am on the product catalog page
     And I choose the product "<product1>"

@@ -23,11 +23,30 @@ public class AndroidConnector extends LocalDriver {
         cap.setCapability("deviceName",device.toString());
         cap.setCapability("platformName",platform.toLowerCase());
         // other
+        //cap.setCapability("appPackage","com.webviewexample");
         cap.setCapability("appPackage","com.example.shop_app");
         cap.setCapability("automationName","UiAutomator2");
 
+/*        // avd
+        cap.setCapability("deviceName",device.toString());
+        cap.setCapability("platformName",platform.toLowerCase());
+        //cap.setCapability("platformVersion","1.0");
+        // other
+        cap.setCapability("appPackage","com.webviewexample");
+       // cap.setCapability("appPackage","com.example.shop_app");
+        cap.setCapability("automationName","UiAutomator1");
+        //cap.setCapability("fullContextList","true");
+        cap.setCapability("autoWebview",true);
+        cap.setCapability("autoWebviewTimeout","20000");
+        cap.setCapability("appActivity",".MainActivity");
+        cap.setCapability("autoGrantPermissions",true);
+        cap.setCapability("ignoreHiddenApiPolicyError",true);*/
+
         //driver = new AndroidDriver<>( new URL("http://127.0.0.1:4877/wd/hub/"), cap);
+
         driver = new AndroidDriver<>( super.getWebDriveRemoteUrl(), cap);
+
+        driver.context("NATIVE_APP");
     }
 
 }

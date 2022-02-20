@@ -128,6 +128,17 @@ public abstract class View {
         }
     }
 
+    public void loginValidatorBTV(MobileElement mElement, String name, String number, String password) {
+        try {
+            if (wait.until(ExpectedConditions.visibilityOf(mElement)) != null) {
+                Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+                Assert.fail("INVALID CREDENTIALS: " + mElement.getAttribute("text") + "\n" + "Nom de famille: " + name + "\n" + "number: " + number+ "\n" + "password: " + password);
+            }
+        } catch (Exception e) {
+            System.out.println("Element not present, we are good here!");
+        }
+    }
+
     public void registerFields(MobileElement mElement, String email, String pwd, String cpwd) {
         if (longWaitUntil(visibilityOf(mElement))) {
             Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));

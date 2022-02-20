@@ -7,6 +7,8 @@ import io.cucumber.testng.CucumberOptions;
                 "./src/test/resources/features",
                 "./src/test/resources/features/sc01",
                 "./src/test/resources/features/sc02",
+                "./src/test/resources/features/btv",
+                "./src/test/resources/features/demo",
         },
         monochrome = true,
         glue = {"fr.zenity.appium.stepDefinitions"},

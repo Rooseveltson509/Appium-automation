@@ -26,7 +26,7 @@ public class RegisterView extends View {
     @AndroidFindBy(xpath = "//android.widget.EditText[@index='4']")
     private MobileElement cPwd;
 
-    @AndroidFindBy(xpath = "//android.widget.Button[@index='5']")
+    @AndroidFindBy(xpath = "//android.widget.Button[@content-desc='Continuer']")
     private MobileElement btnSubscribe;
 
     @AndroidFindBy(xpath = "//android.widget.Button[@index='8']")

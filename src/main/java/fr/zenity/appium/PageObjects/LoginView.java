@@ -69,12 +69,12 @@ public class LoginView extends View{
     }
 
     public void loginValidate(String email,String password) {
-        if(longWaitUntil(visibilityOf(checkPwdToShort))){
-            loginValidator(checkPwdToShort, email, password);
+        if(longWaitUntil(visibilityOf(checkPwdIsWong))){
+            loginValidator(checkPwdIsWong, email, password);
         } else if(longWaitUntil(visibilityOf(checkEmailIsValid))){
             loginValidator(checkEmailIsValid, email, password);
-        } else if(longWaitUntil(visibilityOf(checkPwdIsWong))){
-            loginValidator(checkPwdIsWong, email, password);
+        } else if(longWaitUntil(visibilityOf(checkPwdToShort))){
+            loginValidator(checkPwdToShort, email, password);
         } else{
             System.out.println("Nothing to report.....");
         }
