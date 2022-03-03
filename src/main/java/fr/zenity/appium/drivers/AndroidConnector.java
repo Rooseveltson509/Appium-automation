@@ -23,7 +23,9 @@ public class AndroidConnector extends LocalDriver {
         cap.setCapability("deviceName",device.toString());
         cap.setCapability("platformName",platform.toLowerCase());
         // other
-        //cap.setCapability("appPackage","com.webviewexample");
+       /* First application package*/
+        //cap.setCapability("appPackage","com.webviewexample")
+        /* Second application package*/;
         cap.setCapability("appPackage","com.example.shop_app");
         cap.setCapability("automationName","UiAutomator2");
 

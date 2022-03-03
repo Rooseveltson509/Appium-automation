@@ -2,7 +2,6 @@ package fr.zenity.appium.stepDefinitions;
 
 import fr.zenity.appium.PageObjects.HomePage;
 import io.cucumber.java8.En;
-import io.cucumber.java8.Th;
 
 public class HomeSteps implements En {
 
